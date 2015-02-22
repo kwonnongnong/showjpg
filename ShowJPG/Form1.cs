@@ -112,6 +112,7 @@ namespace ShowJPG
         private void button5_MouseDown(object sender, MouseEventArgs e)
         {
             this.Dispose();
+            serialPort1.Close();
         }
         private void showPhoto(Bitmap inputBitmap)
         {
