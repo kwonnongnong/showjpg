@@ -215,31 +215,38 @@ namespace ShowJPG
             Graphics formGraphics = pictureBox1.CreateGraphics();
             for (i = 0; i < 3; i++) formGraphics.FillRectangle(Brushes.Black, Rect[i]);
             // serialPort1;
-            if (indata == "100\r") progressBar1.Value = progressBar1.Value + 10;
-            else if (indata == "010\r") { progressBar1.Value = progressBar1.Value + 10; progressBar2.Value = progressBar2.Value + 10; }
-            else if (indata == "001\r") { progressBar2.Value = progressBar2.Value + 10; }
-            else Console.WriteLine(indata);
+            this.Invoke(new Action(delegate()
+            {
+                if (indata == "100\r") progressBar1.Value = progressBar1.Value + 10;
+                else if (indata == "010\r") { progressBar1.Value = progressBar1.Value + 10; progressBar2.Value = progressBar2.Value + 10; }
+                else if (indata == "001\r") { progressBar2.Value = progressBar2.Value + 10; }
+                else Console.WriteLine(indata);
+
+                if (progressBar1.Value == 100 && progressBar2.Value == 100)
+                {
+                    progressBar1.Value = 0;
+                    progressBar2.Value = 0;
+                    n = 1;
+                }
+
+                else if (progressBar1.Value == 100)
+                {
+                    progressBar1.Value = 0;
+                    progressBar2.Value = 0;
+                    n = 0;
+                }
+                else if (progressBar2.Value == 100)
+                {
+                    progressBar1.Value = 0;
+                    progressBar2.Value = 0;
+                    n = 2;
+                }
+            }
+                ));
+           
 
 
-            if (progressBar1.Value == 100 && progressBar2.Value == 100)
-            {
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 1;
-            }
-
-            else if (progressBar1.Value == 100)
-            {
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 0;
-            }
-            else if (progressBar2.Value == 100)
-            {
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 2;
-            }
+           
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
             DownloadRemoteImageFile("https://z.enha.kr/http://rigvedawiki.net/r1/pds/_ec_95_84_ec_9d_b4_ec_82_ac_ec_b9_b4_20_ed_83_80_ec_9d_b4_ea_b0_80/aisaka_taiga.jpg");
