@@ -66,7 +66,7 @@ namespace ShowJPG
         private void button4_MouseDown(object sender, MouseEventArgs e)
         {
             DrawGrid();
-            ipaddr ="http://"+textBox1.Text.ToString()+":8080/;
+            ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
             
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
@@ -214,8 +214,8 @@ namespace ShowJPG
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
             Console.WriteLine(ipaddr);
-            if (indata == "pic\r") { 
-                DownloadRemoteImageFile("https://z.enha.kr/http://rigvedawiki.net/r1/pds/_ec_95_84_ec_9d_b4_ec_82_ac_ec_b9_b4_20_ed_83_80_ec_9d_b4_ea_b0_80/aisaka_taiga.jpg");
+            if (indata == "pic\r") {
+                DownloadRemoteImageFile(ipaddr);
             }
             showPhoto(PhotoImage);
             formGraphics.Dispose();
