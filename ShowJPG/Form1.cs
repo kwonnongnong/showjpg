@@ -30,42 +30,6 @@ namespace ShowJPG
             InitializeComponent();
         }
 
-        private void button1_MouseDown(object sender, MouseEventArgs e)
-        {
-            int i, n=0;
-            Graphics formGraphics = pictureBox1.CreateGraphics();
-            for(i=0; i<3; i++) formGraphics.FillRectangle(Brushes.Black, Rect[i]);
-           // serialPort1;
-
-            if (sender == this.button1) { progressBar1.Value = progressBar1.Value + 10; }
-            else if (sender == this.button2) { progressBar1.Value = progressBar1.Value + 10; progressBar2.Value = progressBar2.Value + 10; }
-            else if (sender == this.button3) { progressBar2.Value = progressBar2.Value + 10; }
-            else return;
-            
-            
-            if (progressBar1.Value == 100 && progressBar2.Value == 100)
-            {
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 1;
-            }
-
-            else if (progressBar1.Value == 100){
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 0;
-            }
-            else if (progressBar2.Value == 100) {
-                progressBar1.Value = 0;
-                progressBar2.Value = 0;
-                n = 2;
-            }
-
-            formGraphics.FillRectangle(Brushes.Red, Rect[n]);
-            DownloadRemoteImageFile("https://z.enha.kr/http://rigvedawiki.net/r1/pds/_ec_95_84_ec_9d_b4_ec_82_ac_ec_b9_b4_20_ed_83_80_ec_9d_b4_ea_b0_80/aisaka_taiga.jpg");
-            showPhoto(PhotoImage);
-            formGraphics.Dispose();
-        }
 
         private void DrawGrid()
         {
@@ -77,10 +41,10 @@ namespace ShowJPG
 
             double pi = Math.PI;
             int x = Rheight - (int)(Rheight * Math.Cos(pi * 50 / 180));
-            int y = Rheight - (int)(Rheight * Math.Sin(pi * 30 / 180))+20;
+            int y = Rheight - (int)(Rheight * Math.Sin(pi * 30 / 180)) + 20;
             Rect[0] = new Rectangle(x, y, 20, 20);
-            Rect[1] = new Rectangle(Rwidth / 2-10, Rheight/3, 20, 20);
-            Rect[2] = new Rectangle(Rwidth - x-20, y, 20, 20);
+            Rect[1] = new Rectangle(Rwidth / 2 - 10, Rheight / 3, 20, 20);
+            Rect[2] = new Rectangle(Rwidth - x - 20, y, 20, 20);
 
 
             Graphics formGraphics = pictureBox1.CreateGraphics();
@@ -88,8 +52,8 @@ namespace ShowJPG
 
             formGraphics.Clear(Color.Black);
 
-            Pen pen1 = new Pen(Color.FromArgb(255, 0, 100, 0),2);
-            Pen pen2 = new Pen(Color.FromArgb(255, 0, 220, 100),2);
+            Pen pen1 = new Pen(Color.FromArgb(255, 0, 100, 0), 2);
+            Pen pen2 = new Pen(Color.FromArgb(255, 0, 220, 100), 2);
 
             formGraphics.DrawPie(pen1, 0, 0, 2 * Rheight, 2 * Rheight, 180, 130);
             formGraphics.DrawPie(pen2, Rwidth - 2 * Rheight, 0, 2 * Rheight, 2 * Rheight, 230, 130);
@@ -102,6 +66,8 @@ namespace ShowJPG
         private void button4_MouseDown(object sender, MouseEventArgs e)
         {
             DrawGrid();
+            serialPort1.PortName = comboBox1.SelectedItem.ToString();
+            serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
             serialPort1.Open();
             if (serialPort1.IsOpen)
             {
@@ -119,7 +85,7 @@ namespace ShowJPG
             //string fname = strDir + fnames[n];
             try
             {
-               // PhotoImage = new Bitmap(inputstream);
+                // PhotoImage = new Bitmap(inputstream);
                 pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
                 pictureBox2.Image = (Image)PhotoImage;
             }
@@ -145,18 +111,18 @@ namespace ShowJPG
                     bImage)
                 {
                     using (Stream inputStream = response.GetResponseStream())//respon된 stream INputStream에 삽입
-                    PhotoImage = new Bitmap(inputStream);
-                   // return true;
+                        PhotoImage = new Bitmap(inputStream);
+                    // return true;
                 }
                 else
                 {
-                   // return false;
+                    // return false;
                 }
             }
             catch (WebException e)
             {
                 Console.Write("에러 메시지" + e.Message);
-               // return false;
+                // return false;
             }
         }
         //**********************************************************************//
@@ -229,7 +195,6 @@ namespace ShowJPG
                     progressBar2.Value = 0;
                     n = 1;
                 }
-
                 else if (progressBar1.Value == 100)
                 {
                     progressBar1.Value = 0;
@@ -244,16 +209,28 @@ namespace ShowJPG
                 }
             }
                 ));
-           
-
-
-           
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
             DownloadRemoteImageFile("https://z.enha.kr/http://rigvedawiki.net/r1/pds/_ec_95_84_ec_9d_b4_ec_82_ac_ec_b9_b4_20_ed_83_80_ec_9d_b4_ea_b0_80/aisaka_taiga.jpg");
             showPhoto(PhotoImage);
             formGraphics.Dispose();
-        }   
-       //****//
+        }
+
+        private void comboBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            comboBox1.Items.Clear();
+            foreach (string name in System.IO.Ports.SerialPort.GetPortNames())
+                comboBox1.Items.Add(name);
+
+
+        }
+
+        private void comboBox2_MouseDown(object sender, MouseEventArgs e)
+        {
+            comboBox2.Items.Clear();
+            comboBox2.Items.Add("9600");
+            comboBox2.Items.Add("12800");
+        }
+        //****//
     }
 }
