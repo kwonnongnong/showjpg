@@ -65,6 +65,7 @@ namespace ShowJPG
 
         private void button4_MouseDown(object sender, MouseEventArgs e)
         {
+            button4.Enabled = false;
             DrawGrid();
             ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
             
@@ -80,6 +81,7 @@ namespace ShowJPG
         private void button5_MouseDown(object sender, MouseEventArgs e)
         {
             this.Dispose();
+            button4.Enabled = true;
             serialPort1.Close();
         }
         private void showPhoto(Bitmap inputBitmap)
@@ -114,15 +116,18 @@ namespace ShowJPG
                 {
                     using (Stream inputStream = response.GetResponseStream())//respon된 stream INputStream에 삽입
                         PhotoImage = new Bitmap(inputStream);
+                    Console.Write("사진");
                     // return true;
                 }
                 else
                 {
+                    Console.Write("사진안찎힘");
                     // return false;
                 }
             }
             catch (WebException e)
             {
+                Console.Write("??");
                 Console.Write("에러 메시지" + e.Message);
                 // return false;
             }
@@ -214,9 +219,9 @@ namespace ShowJPG
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
             Console.WriteLine(ipaddr);
-            if (indata == "pic\r") {
+           // if (indata == "pic\r") {
                 DownloadRemoteImageFile(ipaddr);
-            }
+            //}
             showPhoto(PhotoImage);
             formGraphics.Dispose();
         }
