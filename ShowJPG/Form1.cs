@@ -67,8 +67,8 @@ namespace ShowJPG
         {
             button4.Enabled = false;
             DrawGrid();
-            ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
-            
+            //ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
+            ipaddr = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-fW5ewnUViBrZPz6GQzEHCJ9sH2K4esPYnIxs0GwNsqStxfiirtKs28";
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
             serialPort1.Open();
@@ -84,6 +84,7 @@ namespace ShowJPG
             button4.Enabled = true;
             serialPort1.Close();
         }
+
         private void showPhoto(Bitmap inputBitmap)
         {
             //string fname = strDir + fnames[n];
@@ -114,8 +115,20 @@ namespace ShowJPG
                     response.StatusCode == HttpStatusCode.Redirect) &&
                     bImage)
                 {
-                    using (Stream inputStream = response.GetResponseStream())//respon된 stream INputStream에 삽입
-                        PhotoImage = new Bitmap(inputStream);
+                    using (Stream inputStream = response.GetResponseStream()){//respon된 stream INputStream에 삽입
+                        //Stream inputStream = response.GetResponseStream();
+                        //Stream inputStream2 = response.GetResponseStream();
+                        try
+                        {
+                            PhotoImage = new Bitmap(inputStream);//stream to bitmap
+                            String fileName = "c:/device_testpic/" + System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                            PhotoImage.Save(fileName);//사진저장
+                        }
+                        catch (ArgumentException e)
+                        {
+                            Console.Write("스트림이 NULL" + e.Message);//stream 이 비어있을때
+                        }
+                    }
                     Console.Write("사진");
                     // return true;
                 }
