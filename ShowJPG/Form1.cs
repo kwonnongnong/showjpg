@@ -9,7 +9,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
-using System.Data.SQLite;
+
 
 
 namespace ShowJPG
@@ -25,7 +25,7 @@ namespace ShowJPG
        //string[] fnames = { "S1.jpg", "S2.jpg", "S3.jpg" };
         Bitmap PhotoImage;
         string ipaddr;
-        SQLiteConnection conn;
+
 
         public Form1()
         {
@@ -252,6 +252,11 @@ namespace ShowJPG
             comboBox2.Items.Clear();
             comboBox2.Items.Add("9600");
             comboBox2.Items.Add("12800");
+        }
+
+        private void button1_MouseDown(object sender, MouseEventArgs e)
+        {
+
         }
         //****//
     }
