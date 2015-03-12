@@ -9,27 +9,28 @@ using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Windows.Forms;
+using System.Data.SQLite;
 
 
 namespace ShowJPG
 {
     public partial class Form1 : Form
-    {
+    { 
         int Rwidth;
         int Rheight;
         int Pwidth;
         int Pheight;
         Rectangle[] Rect = new Rectangle[3];
-        string strDir = "..\\..\\..\\..\\JPG_files\\";
-        string[] fnames = { "S1.jpg", "S2.jpg", "S3.jpg" };
+       //string strDir = "..\\..\\..\\..\\JPG_files\\";
+       //string[] fnames = { "S1.jpg", "S2.jpg", "S3.jpg" };
         Bitmap PhotoImage;
         string ipaddr;
+        SQLiteConnection conn;
 
         public Form1()
         {
             InitializeComponent();
         }
-
 
         private void DrawGrid()
         {
@@ -67,8 +68,8 @@ namespace ShowJPG
         {
             button4.Enabled = false;
             DrawGrid();
-            //ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
-            ipaddr = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-fW5ewnUViBrZPz6GQzEHCJ9sH2K4esPYnIxs0GwNsqStxfiirtKs28";
+            ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
+           // ipaddr = "http://uwins.ulsan.ac.kr/COMM/StudPhoto.aspx?hagbeon=20102489"; 
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
             serialPort1.Open();
@@ -96,7 +97,7 @@ namespace ShowJPG
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error!! : filename error");
+                MessageBox.Show(e.Message+"Error!! : filename error");
             }
         }//image 출력부
 
@@ -116,8 +117,6 @@ namespace ShowJPG
                     bImage)
                 {
                     using (Stream inputStream = response.GetResponseStream()){//respon된 stream INputStream에 삽입
-                        //Stream inputStream = response.GetResponseStream();
-                        //Stream inputStream2 = response.GetResponseStream();
                         try
                         {
                             PhotoImage = new Bitmap(inputStream);//stream to bitmap
@@ -232,9 +231,9 @@ namespace ShowJPG
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
             Console.WriteLine(ipaddr);
-           // if (indata == "pic\r") {
+            if (indata == "pic\r") {
                 DownloadRemoteImageFile(ipaddr);
-            //}
+            }
             showPhoto(PhotoImage);
             formGraphics.Dispose();
         }
