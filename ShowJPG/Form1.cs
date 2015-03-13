@@ -20,16 +20,19 @@ namespace ShowJPG
         int Rheight;
         int Pwidth;
         int Pheight;
+        public logForm2 logform2;
         Rectangle[] Rect = new Rectangle[3];
        //string strDir = "..\\..\\..\\..\\JPG_files\\";
        //string[] fnames = { "S1.jpg", "S2.jpg", "S3.jpg" };
         Bitmap PhotoImage;
+        
         string ipaddr;
 
 
         public Form1()
         {
             InitializeComponent();
+            logform2 = new logForm2(this);
         }
 
         private void DrawGrid()
@@ -256,7 +259,7 @@ namespace ShowJPG
 
         private void button1_MouseDown(object sender, MouseEventArgs e)
         {
-
+            logform2.ShowDialog();
         }
         //****//
     }

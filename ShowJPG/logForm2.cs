@@ -12,11 +12,17 @@ namespace ShowJPG
 {
     public partial class logForm2 : Form
     {
+        Form1 mainForm;
         SQLiteConnection sqlconn;
         string connStr = @"Data Source=\mydb.db";
         public logForm2()
         {
             InitializeComponent();
+        }
+        public logForm2( Form1 mForm)
+        {
+            InitializeComponent();
+            mainForm = mForm;
         }
         private SQLiteConnection Sqlconnect()
         {
