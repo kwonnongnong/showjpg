@@ -233,7 +233,7 @@ namespace ShowJPG
                 ));
 
             formGraphics.FillRectangle(Brushes.Red, Rect[n]);
-            Console.WriteLine(ipaddr);
+            //Console.WriteLine(ipaddr);
             if (indata == "pic\r") {
                 DownloadRemoteImageFile(ipaddr);
             }

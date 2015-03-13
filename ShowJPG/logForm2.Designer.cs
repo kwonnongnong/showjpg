@@ -61,7 +61,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "<<";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button1_MouseDown);
             // 
             // button2
             // 
@@ -71,7 +71,7 @@
             this.button2.TabIndex = 3;
             this.button2.Text = "갱신";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button2_MouseDown);
             // 
             // button3
             // 
@@ -81,6 +81,7 @@
             this.button3.TabIndex = 4;
             this.button3.Text = ">>";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button3_MouseDown);
             // 
             // logForm2
             // 

@@ -14,7 +14,7 @@ namespace ShowJPG
     {
         Form1 mainForm;
         SQLiteConnection sqlconn;
-        string connStr = @"Data Source=\mydb.db";
+        string connStr = @"Data Source=.\mydb.db";
         public logForm2()
         {
             InitializeComponent();
@@ -26,27 +26,14 @@ namespace ShowJPG
         }
         private SQLiteConnection Sqlconnect()
         {
-            using (var conn = new SQLiteConnection(connStr))
-            {
-                return conn.OpenAndReturn();
-            }
+            var conn = new SQLiteConnection(connStr);
+            return conn.OpenAndReturn();
+            
 
         }
         private void Sqldiscon(SQLiteConnection conn)
         {
             conn.Close();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DataSet ds = select_Adapter();
-            DataTable table = ds.Tables["log"];
-            foreach (DataRow row in table.Rows)
-            {
-                Console.WriteLine(row["No"].ToString() + row["F_name"].ToString() + row["date"].ToString());
-            }
-            
-
         }
         private DataSet select_Adapter()
         {
@@ -60,12 +47,24 @@ namespace ShowJPG
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button1_MouseDown(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine("클릭됨");
+            DataSet ds = select_Adapter();
+            DataTable table = ds.Tables["log"];
+            foreach (DataRow row in table.Rows)//exception 발생함 수정필요
+
+            {
+                Console.WriteLine(row["No"].ToString() + row["F_name"].ToString() + row["date"].ToString());
+            }
+        }
+
+        private void button2_MouseDown(object sender, MouseEventArgs e)
         {
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void button3_MouseDown(object sender, MouseEventArgs e)
         {
 
         }
