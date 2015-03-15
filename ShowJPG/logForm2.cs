@@ -17,6 +17,7 @@ namespace ShowJPG
         int sql_offset=0;//초기 offset 0 ;
         const int offset_size = 10;
         string connStr = @"Data Source=.\mydb.db";
+        string strDir = "C:\testpic\\";
         public logForm2()
         {
             InitializeComponent();
@@ -37,15 +38,16 @@ namespace ShowJPG
         {
             conn.Close();
         }
-        private DataSet select_Adapter()
+        private SQLiteDataReader select_log()
         {
-            SQLiteConnection conn = Sqlconnect();
-            DataSet ds = new DataSet();
-            string sql = "select * from log limit 10 offset " + offset_size;
-            var adpt = new SQLiteDataAdapter(sql, conn);
-            adpt.Fill(ds);
+            sqlconn = Sqlconnect();
 
-            return ds;
+            string strSQL_sel = "select * from log  order by No desc limit 15 offset " + offset_size + ";";
+            SQLiteCommand sqlcmd = new SQLiteCommand(strSQL_sel, sqlconn);
+            SQLiteDataReader rd = sqlcmd.ExecuteReader();
+            sqlcmd.Dispose();
+           // Sqldiscon(conn);
+            return rd;
 
         }
 
@@ -56,36 +58,70 @@ namespace ShowJPG
                 sql_offset = sql_offset - offset_size;
             else
                 Console.WriteLine("가장 최근 Log입니다");
-            DataSet ds = select_Adapter();
-            DataTable table = ds.Tables["log"];
-            foreach (DataRow row in table.Rows)//exception 발생함 수정필요
+            SQLiteDataReader rd = select_log();
+
+            listBox1.Items.Clear();
+            while (rd.Read())
             {
-                Console.WriteLine(row["No"].ToString() + row["F_name"].ToString() + row["date"].ToString());
+                Console.Write(rd["F_name"] + " ");
+                Console.WriteLine(rd["date"]);
+                listBox1.Items.Add(rd["date"]);
             }
-            /******************/
+            rd.Close();
+            sqlconn.Close();
+        
             
         }
 
         private void button2_MouseDown(object sender, MouseEventArgs e)
         {
             sql_offset = 0;
-            DataSet ds = select_Adapter();
-            DataTable table = ds.Tables["log"];
-            foreach (DataRow row in table.Rows)//exception 발생함 수정필요
+            SQLiteDataReader rd = select_log();
+
+            while (rd.Read())
             {
-                Console.WriteLine(row["No"].ToString() + row["F_name"].ToString() + row["date"].ToString());
+                Console.Write(rd["F_name"]+" ");
+                Console.WriteLine(rd["date"]);
             }
+            rd.Close();
+            sqlconn.Close();
         }
 
         private void button3_MouseDown(object sender, MouseEventArgs e)
         {
             sql_offset = sql_offset + offset_size;
-            DataSet ds = select_Adapter();
-            DataTable table = ds.Tables["log"];
-            foreach (DataRow row in table.Rows)//exception 발생함 수정필요
+            SQLiteDataReader rd = select_log();
+
+            //수정필요
+            while (rd.Read())
             {
-                Console.WriteLine(row["No"].ToString() + row["F_name"].ToString() + row["date"].ToString());
+                Console.Write(rd["F_name"] + " ");
+                Console.WriteLine(rd["date"]);
             }
+            rd.Close();
+            sqlconn.Close();
+
+        }
+
+        private void showPhoto(string f_name)
+        {
+            string P_fname = strDir +f_name+".jpg" ;
+            try
+            {
+                Bitmap PhotoImage = new Bitmap(P_fname);
+                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                pictureBox1.Image = (Image)PhotoImage;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "Error!! : filename error");
+            }
+        }//image 출력부
+
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
 
         }
     }

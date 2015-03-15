@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
+using System.Data.SQLite;
 using System.Windows.Forms;
 
 
@@ -20,6 +21,7 @@ namespace ShowJPG
         int Rheight;
         int Pwidth;
         int Pheight;
+        string connStr = @"Data Source=.\mydb.db";
         public logForm2 logform2;
         Rectangle[] Rect = new Rectangle[3];
        //string strDir = "..\\..\\..\\..\\JPG_files\\";
@@ -34,7 +36,32 @@ namespace ShowJPG
             InitializeComponent();
             logform2 = new logForm2(this);
         }
+        private SQLiteConnection Sqlconnect()
+        {
+            var conn = new SQLiteConnection(connStr);
+            return conn.OpenAndReturn();
 
+
+        }
+        private void Sqldiscon(SQLiteConnection conn)
+        {
+            conn.Close();
+        }
+        private void SqlInsert(SQLiteConnection conn,string f_name,string date)
+        {
+            using (conn)
+            {
+                conn.Open();
+
+                string strSQL = "INSERT INTO log (F_name,date) VALUES (" + f_name + "," + date + ");";
+                SQLiteCommand sqlcmd = new SQLiteCommand(strSQL, conn);
+                sqlcmd.ExecuteNonQuery();
+                sqlcmd.Dispose();
+
+
+            }
+
+        }
         private void DrawGrid()
         {
             Rwidth = pictureBox1.ClientSize.Width;
