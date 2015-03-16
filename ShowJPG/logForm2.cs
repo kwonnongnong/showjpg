@@ -17,7 +17,7 @@ namespace ShowJPG
         int sql_offset=0;//초기 offset 0 ;
         const int offset_size = 10;
         string connStr = @"Data Source=.\mydb.db";
-        string strDir = "C:\testpic\\";
+        string strDir = "C:/device_testpic/";
         public logForm2()
         {
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace ShowJPG
         {
             sqlconn = Sqlconnect();
 
-            string strSQL_sel = "select * from log  order by No desc limit 15 offset " + offset_size + ";";
+            string strSQL_sel = "select * from log  order by No desc limit 10 offset " + sql_offset + ";";
             SQLiteCommand sqlcmd = new SQLiteCommand(strSQL_sel, sqlconn);
             SQLiteDataReader rd = sqlcmd.ExecuteReader();
             sqlcmd.Dispose();
@@ -76,12 +76,15 @@ namespace ShowJPG
         private void button2_MouseDown(object sender, MouseEventArgs e)
         {
             sql_offset = 0;
+
             SQLiteDataReader rd = select_log();
 
+            listBox1.Items.Clear();
             while (rd.Read())
             {
                 Console.Write(rd["F_name"]+" ");
                 Console.WriteLine(rd["date"]);
+                listBox1.Items.Add(rd["date"]);
             }
             rd.Close();
             sqlconn.Close();
@@ -93,10 +96,12 @@ namespace ShowJPG
             SQLiteDataReader rd = select_log();
 
             //수정필요
+            listBox1.Items.Clear();
             while (rd.Read())
             {
                 Console.Write(rd["F_name"] + " ");
                 Console.WriteLine(rd["date"]);
+                listBox1.Items.Add(rd["date"]);
             }
             rd.Close();
             sqlconn.Close();
@@ -106,6 +111,7 @@ namespace ShowJPG
         private void showPhoto(string f_name)
         {
             string P_fname = strDir +f_name+".jpg" ;
+            Console.WriteLine(P_fname);
             try
             {
                 Bitmap PhotoImage = new Bitmap(P_fname);
@@ -121,7 +127,9 @@ namespace ShowJPG
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            //Console.WriteLine("as"+listBox1.SelectedValue.ToString());
+           // Console.WriteLine("asdsa"+listBox1.SelectedItems.ToString());
+            showPhoto(listBox1.SelectedItem.ToString());
 
         }
     }

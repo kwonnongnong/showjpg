@@ -22,6 +22,7 @@ namespace ShowJPG
         int Pwidth;
         int Pheight;
         string connStr = @"Data Source=.\mydb.db";
+        SQLiteConnection sqlconn;
         public logForm2 logform2;
         Rectangle[] Rect = new Rectangle[3];
        //string strDir = "..\\..\\..\\..\\JPG_files\\";
@@ -47,19 +48,19 @@ namespace ShowJPG
         {
             conn.Close();
         }
-        private void SqlInsert(SQLiteConnection conn,string f_name,string date)
+        private void SqlInsert(string f_name,string date)
         {
-            using (conn)
-            {
-                conn.Open();
+            sqlconn = Sqlconnect();
 
-                string strSQL = "INSERT INTO log (F_name,date) VALUES (" + f_name + "," + date + ");";
-                SQLiteCommand sqlcmd = new SQLiteCommand(strSQL, conn);
-                sqlcmd.ExecuteNonQuery();
-                sqlcmd.Dispose();
+            //sqlconn.Open();
 
+            string strSQL = "INSERT INTO log (F_name,date) VALUES ('" + f_name + "','" + date + "');";
+            SQLiteCommand sqlcmd = new SQLiteCommand(strSQL, sqlconn);
+            sqlcmd.ExecuteNonQuery();
+            sqlcmd.Dispose();
 
-            }
+            //return sqlconn;
+
 
         }
         private void DrawGrid()
@@ -98,7 +99,8 @@ namespace ShowJPG
         {
             button4.Enabled = false;
             DrawGrid();
-            ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
+            //ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
+            ipaddr = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT-1s4Jm1mYuRBufxyVI23ylhGpSoubvgWd8p5UkZtvwKgFRaDJ6w";
            // ipaddr = "http://uwins.ulsan.ac.kr/COMM/StudPhoto.aspx?hagbeon=20102489"; 
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
@@ -150,8 +152,12 @@ namespace ShowJPG
                         try
                         {
                             PhotoImage = new Bitmap(inputStream);//stream to bitmap
-                            String fileName = "c:/device_testpic/" + System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+                            string date = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                            String fileName = "c:/device_testpic/" + date  + ".jpg";
                             PhotoImage.Save(fileName);//사진저장
+                            SqlInsert(date + ".jpg", date);
+                            sqlconn.Close();
+                            System.Threading.Thread.Sleep(1000);
                         }
                         catch (ArgumentException e)
                         {
@@ -234,14 +240,13 @@ namespace ShowJPG
             this.Invoke(new Action(delegate()
             {
                 if (indata == "100\r") progressBar1.Value = progressBar1.Value + 10;
-                else if (indata == "010\r") { progressBar1.Value = progressBar1.Value + 10; progressBar2.Value = progressBar2.Value + 10; }
+                else if (indata == "010\r") { progressBar3.Value = progressBar3.Value + 10; }
                 else if (indata == "001\r") { progressBar2.Value = progressBar2.Value + 10; }
                 else Console.WriteLine(indata);
 
-                if (progressBar1.Value == 100 && progressBar2.Value == 100)
+                if (progressBar3.Value == 100 )
                 {
-                    progressBar1.Value = 0;
-                    progressBar2.Value = 0;
+                    progressBar3.Value = 0;
                     n = 1;
                 }
                 else if (progressBar1.Value == 100)
