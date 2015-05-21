@@ -5,37 +5,16 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowJPG", "ShowJPG\ShowJPG.csproj", "{5A525CA1-367D-490F-8ED9-C18EBAAA0576}"
 EndProject
-Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup4", "Setup4\Setup4.isproj", "{DC10A22F-982D-4325-8634-44A68C0FC5A8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		CD_ROM|x86 = CD_ROM|x86
 		Debug|x86 = Debug|x86
-		DVD-5|x86 = DVD-5|x86
 		Release|x86 = Release|x86
-		SingleImage|x86 = SingleImage|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.CD_ROM|x86.ActiveCfg = Release|x86
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.CD_ROM|x86.Build.0 = Release|x86
 		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.Debug|x86.ActiveCfg = Debug|x86
 		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.Debug|x86.Build.0 = Debug|x86
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.DVD-5|x86.ActiveCfg = Debug|x86
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.DVD-5|x86.Build.0 = Debug|x86
 		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.Release|x86.ActiveCfg = Release|x86
 		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.Release|x86.Build.0 = Release|x86
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.SingleImage|x86.ActiveCfg = Release|x86
-		{5A525CA1-367D-490F-8ED9-C18EBAAA0576}.SingleImage|x86.Build.0 = Release|x86
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.CD_ROM|x86.ActiveCfg = CD_ROM
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.CD_ROM|x86.Build.0 = CD_ROM
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.Debug|x86.ActiveCfg = DVD-5
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.Debug|x86.Build.0 = DVD-5
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.DVD-5|x86.ActiveCfg = DVD-5
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.DVD-5|x86.Build.0 = DVD-5
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.Release|x86.ActiveCfg = SingleImage
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.Release|x86.Build.0 = SingleImage
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.SingleImage|x86.ActiveCfg = SingleImage
-		{DC10A22F-982D-4325-8634-44A68C0FC5A8}.SingleImage|x86.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
