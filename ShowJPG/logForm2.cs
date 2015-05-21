@@ -26,6 +26,7 @@ namespace ShowJPG
         {
             InitializeComponent();
             mainForm = mForm;
+            list_renew();
         }
         private SQLiteConnection Sqlconnect()
         {
@@ -50,7 +51,22 @@ namespace ShowJPG
             return rd;
 
         }
+        private void list_renew()
+        {
+            sql_offset = 0;
 
+            SQLiteDataReader rd = select_log();
+
+            listBox1.Items.Clear();
+            while (rd.Read())
+            {
+                Console.Write(rd["F_name"] + " ");
+                Console.WriteLine(rd["date"]);
+                listBox1.Items.Add(rd["date"]);
+            }
+            rd.Close();
+            sqlconn.Close();
+        }
         private void button1_MouseDown(object sender, MouseEventArgs e)
         {   /****tempcode**절대수정할것!!***/
             Console.WriteLine("클릭됨");
@@ -75,19 +91,7 @@ namespace ShowJPG
 
         private void button2_MouseDown(object sender, MouseEventArgs e)
         {
-            sql_offset = 0;
-
-            SQLiteDataReader rd = select_log();
-
-            listBox1.Items.Clear();
-            while (rd.Read())
-            {
-                Console.Write(rd["F_name"]+" ");
-                Console.WriteLine(rd["date"]);
-                listBox1.Items.Add(rd["date"]);
-            }
-            rd.Close();
-            sqlconn.Close();
+            list_renew();
         }
 
         private void button3_MouseDown(object sender, MouseEventArgs e)
