@@ -99,8 +99,8 @@ namespace ShowJPG
         {
             button4.Enabled = false;
             DrawGrid();
-            //ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
-            ipaddr = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT-1s4Jm1mYuRBufxyVI23ylhGpSoubvgWd8p5UkZtvwKgFRaDJ6w";
+            ipaddr ="http://"+textBox1.Text.ToString()+":81/snapshot.cgi?user=admin&pwd=888888";
+            //ipaddr = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcT-1s4Jm1mYuRBufxyVI23ylhGpSoubvgWd8p5UkZtvwKgFRaDJ6w";
            // ipaddr = "http://uwins.ulsan.ac.kr/COMM/StudPhoto.aspx?hagbeon=20102489"; 
             serialPort1.PortName = comboBox1.SelectedItem.ToString();
             serialPort1.BaudRate = Int32.Parse(comboBox2.SelectedItem.ToString());
@@ -231,7 +231,7 @@ namespace ShowJPG
         //시리얼 입력시 작동부분//
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            int i, n = 0;
+            int i, n=2 ;
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadLine();
             Graphics formGraphics = pictureBox1.CreateGraphics();
@@ -239,27 +239,28 @@ namespace ShowJPG
             // serialPort1;
             this.Invoke(new Action(delegate()
             {
-                if (indata == "100\r") progressBar1.Value = progressBar1.Value + 10;
-                else if (indata == "010\r") { progressBar3.Value = progressBar3.Value + 10; }
-                else if (indata == "001\r") { progressBar2.Value = progressBar2.Value + 10; }
-                else Console.WriteLine(indata);
+                if (indata == "100\r") { progressBar1.Value = progressBar1.Value + 10; n = 0; }
+                else if (indata == "010\r") { progressBar3.Value = progressBar3.Value + 10; n = 1; }
+                else if (indata == "001\r") { progressBar2.Value = progressBar2.Value + 10; n = 2; }
+                //else Console.WriteLine(indata);
+                Console.WriteLine(indata);
 
                 if (progressBar3.Value == 100 )
                 {
                     progressBar3.Value = 0;
-                    n = 1;
+                    
                 }
                 else if (progressBar1.Value == 100)
                 {
                     progressBar1.Value = 0;
                     progressBar2.Value = 0;
-                    n = 0;
+                    
                 }
                 else if (progressBar2.Value == 100)
                 {
                     progressBar1.Value = 0;
                     progressBar2.Value = 0;
-                    n = 2;
+                   
                 }
             }
                 ));
@@ -294,5 +295,64 @@ namespace ShowJPG
             logform2.ShowDialog();
         }
         //****//
+        private static string SendGCMNotification(string apiKey, string postData)
+        {
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            //create request
+            HttpWebRequest Request = (HttpWebRequest)WebRequest.Create("https://android.googleapis.com/gcm/send");
+            Request.Method = "POST";
+            Request.KeepAlive = false;
+            Request.ContentType = "application/json";
+            Request.Headers.Add(string.Format("Authorization: key={0}", apiKey));
+            Request.ContentLength = byteArray.Length;
+
+            Stream dataStream = Request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            //send Message
+            try
+            {
+                WebResponse Response = Request.GetResponse();
+                HttpStatusCode Responsecode = ((HttpWebResponse)Response).StatusCode;
+                if (Responsecode.Equals(HttpStatusCode.Unauthorized) || Responsecode.Equals(HttpStatusCode.Forbidden))
+                {
+                    //var text = "unauthorize - need new token";
+                }
+                else if (!Responsecode.Equals(HttpStatusCode.OK))
+                {
+                    //var text = "response from web service isn't OK";
+                }
+                StreamReader Reader = new StreamReader(Response.GetResponseStream());
+                string responseLine = Reader.ReadToEnd();
+                Reader.Close();
+
+                return responseLine;
+
+            }
+            catch (Exception e)
+            {
+                return "error";
+
+            }
+        }
+        static string apikey = "AIzaSyDwEaU1yQ0nJfA0IW9BS3v-V_Y17yLtnOQ";
+        static public string SendGCM(string regid, string ticker, string title, string message)
+        {
+            string postData =
+                "{ \"registration_ids\":[\"" + regid + "\"], " +
+                "\"data\": {\"ticker\":\"" + ticker + "\", " +
+                "\"title\":\"" + title + "\", " +
+                "\"message\": \"" + message + "\"}}";
+
+            return SendGCMNotification(apikey, postData);
+        }
+
+        private void button2_MouseDown(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine(SendGCM("APA91bFOjxsp-wC-hvyHhi0sluHoLASzOItiyea3Xkbek6db62Hh8PX_Er3B-2_N2NgGjXpFJZlkqyIV8xwxiFBezGXn-_ZWolXUROOxh3sQyvJk463mEZ_EEW8sb1p2EGE4moDAwO9I",
+                "push", "title", "testest"));
+
+        }
     }
 }
